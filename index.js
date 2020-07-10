@@ -7,6 +7,11 @@ var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 var loopLimit = 0;
 
+
+app.get('/home',(req,res)=>{
+  res.json('welcome here!!')
+})
+
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
   //fs.writeFile(__dirname + '/start.log', 'started'); 
