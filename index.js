@@ -9,7 +9,7 @@ var loopLimit = 0;
 
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
-  fs.writeFile(__dirname + '/start.log', 'started'); 
+  //fs.writeFile(__dirname + '/start.log', 'started'); 
 });
 
 // Routing
@@ -25,29 +25,23 @@ var gameCollection =  new function() {
 };
 
 function buildGame(socket) {
+  var gameObject = {};
+  gameObject.id = (Math.random()+1).toString(36).slice(2, 18);
+  gameObject.playerOne = socket.username;
+  gameObject.playerTwo = null;
+  gameCollection.totalGameCount ++;
+  gameCollection.gameList.push({gameObject});
 
-
- var gameObject = {};
- gameObject.id = (Math.random()+1).toString(36).slice(2, 18);
- gameObject.playerOne = socket.username;
- gameObject.playerTwo = null;
- gameCollection.totalGameCount ++;
- gameCollection.gameList.push({gameObject});
-
- console.log("Game Created by "+ socket.username + " w/ " + gameObject.id);
- io.emit('gameCreated', {
+  console.log("Game Created by "+ socket.username + " w/ " + gameObject.id);
+  io.emit('gameCreated', {
   username: socket.username,
   gameId: gameObject.id
-});
-
-
+  });
 }
 
 function killGame(socket) {
-
   var notInGame = true;
   for(var i = 0; i < gameCollection.totalGameCount; i++){
-
     var gameId = gameCollection.gameList[i]['gameObject']['id']
     var plyr1Tmp = gameCollection.gameList[i]['gameObject']['playerOne'];
     var plyr2Tmp = gameCollection.gameList[i]['gameObject']['playerTwo'];
@@ -67,15 +61,12 @@ function killGame(socket) {
       socket.emit('leftGame', { gameId: gameId });
       console.log(gameCollection.gameList[i]['gameObject']);
       notInGame = false;
-
     } 
-
   }
 
   if (notInGame == true){
     socket.emit('notInGame');
   }
-
 
 }
 
@@ -187,10 +178,7 @@ io.on('connection', function (socket) {
 
     }
     if (alreadyInGame == false){
-
-
-      gameSeeker(socket);
-      
+      gameSeeker(socket);     
     }
 
   });
