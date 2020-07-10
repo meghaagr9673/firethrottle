@@ -20,5 +20,9 @@
     "express": "^4.14.0",
     "socket.io": "^1.5.1",
     "nodemon": "^1.11.0"
-  }
+  },
+  "keywords": [
+    "example",
+    "heroku"
+  ]
 }
